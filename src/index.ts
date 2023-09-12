@@ -98,9 +98,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
   addUser(target.id, startingRoom.name);
 });
 
-await client.login(
-  'NzY2NDM2OTU4MDI0NDk5MjAw.X4jWCg.TNzTx2fzGutO2_AkV7iAW1i-6Hs'
-);
+await client.login(process.env.DISCORD_TOKEN);
 
 await prisma.$disconnect();
 
