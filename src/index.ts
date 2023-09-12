@@ -1,9 +1,15 @@
-import { Client, GuildChannel } from 'discord.js';
+import { Client, GuildChannel, Partials } from 'discord.js';
 import { generateRooms, rooms } from './data';
 import { addUser, changeRooms, getUsers, prisma } from './database';
 
 const client = new Client({
-  intents: ['Guilds', 'GuildMessages', 'MessageContent'],
+  intents: [
+    'Guilds',
+    'GuildMessages',
+    'MessageContent',
+    'GuildMessageReactions',
+  ],
+  partials: [Partials.Reaction, Partials.Message],
 });
 
 client.on('ready', () => {
@@ -16,7 +22,8 @@ client.on('messageCreate', async (message) => {
   if (
     !message.guild ||
     message.content !== 'shuffle' ||
-    message.author.id !== '366321360861003787'
+    (message.author.id !== '366321360861003787' &&
+      message.author.id !== '353750360151687169')
   ) {
     return;
   }
@@ -64,6 +71,8 @@ client.on('messageReactionAdd', async (reaction, user) => {
   if (reaction.message.id !== '1150902146007580822') {
     return;
   }
+
+  console.log('adding user', user.id, user.globalName);
 
   const target = await reaction.message.guild?.members.fetch(user.id);
   if (!target) {
